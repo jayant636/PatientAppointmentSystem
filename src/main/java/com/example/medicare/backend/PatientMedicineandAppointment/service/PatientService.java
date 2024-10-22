@@ -48,13 +48,15 @@ public class PatientService {
 
     public PatientDto updatePatientDetails(Long patientId, PatientDto patientDto) {
         //check user exists
-        //if yes follow creation steps
+        //if yes follow creation steps + set patientId in patient Entity
         boolean userExists = patientRepository.existsById(patientId);
         if(!userExists){
             throw  new ResourceNotFoundException("Patiend not found with id:"+patientId);
         }
 
+
         PatientEntity patientEntity = modelMapper.map(patientDto,PatientEntity.class);
+        patientEntity.setPatientId(patientId);
         PatientEntity savedPatient = patientRepository.save(patientEntity);
         return modelMapper.map(savedPatient, PatientDto.class);
 
